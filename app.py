@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 import pickle
 import json
 
@@ -12,9 +13,19 @@ def hello_world():
 
 
 model = pickle.load(open('prediction.pxl','rb'))
+class model_input(BaseModel):
 
-@app.post('/predict')
-def insurance_prediction(input_params):
+    age : int
+    sex : int
+    weight : int
+    height : int
+    children : int
+    smoker : int
+    region : int
+
+
+@app.post("/predict")
+def insurance_prediction(input_params: model_input):
     input_data = input_params.json()
     input_dict = json.loads(input_data)
 
@@ -29,7 +40,9 @@ def insurance_prediction(input_params):
 
     prediction_result = model.predict([input_list])
 
-    return prediction_result
+
+        # Return the result in a JSON format
+    return {"prediction": prediction_result[0]}
 
 
 
