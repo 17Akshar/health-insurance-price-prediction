@@ -26,8 +26,8 @@ class model_input(BaseModel):
 
     age : int
     sex : int
-    weight : int
-    height : int
+    weight : float
+    height : float
     children : int
     smoker : int
     region : int
